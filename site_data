@@ -1,0 +1,17 @@
+BSE
+
+	window.open('stockprc2_excel.aspx?scripcd=' + varScripCode.value + '&FromDate=' + varFromDate.value + '&ToDate=' + varToDate.value + '&OldDMY=' + varDMY.value + '&ScripName=' + lblScripName.value, '_blank',
+                'toolbar=yes,location=no, directories=no, status=no, menubar=yes,scrollbars=yes, resizable=yes ,copyhistory=no, width=800, height=600');
+
+
+
+BSE main
+	http://www.bseindia.com/stockinfo/stockprc2_excel.aspx?scripcd=500002&FromDate=01/01/2009&ToDate=06/19/2014&OldDMY=D
+
+NSE
+
+	window.open("/live_market/dynaContent/live_watch/get_quote/getHistoricalData.jsp?symbol="+symbl+"&fromDate="+frmDat+"&toDate="+toDat+"&datePeriod="+perid+"&hiddDwnld="+dwnld+"");
+
+NSE main
+
+	http://www.nseindia.com/live_market/dynaContent/live_watch/get_quote/getHistoricalData.jsp?symbol=infy&fromDate=01-Jan-2009&toDate=19-Jun-2014&datePeriod=unselected&hiddDwnld=true
