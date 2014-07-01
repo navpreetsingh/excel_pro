@@ -1,0 +1,40 @@
+SELECT AVG(VOLUME) FROM `BSE_stocks_details`
+WHERE BSE_stock_id = 3161 
+ORDER BY date ASC
+LIMIT 5
+
+#to calculate volume of last 2 days
+SELECT avg(volume) FROM 
+(SELECT VOLUME FROM `BSE_stocks_details`
+WHERE BSE_stock_id = 3161
+ORDER BY date DESC
+LIMIT 2) S
+
+#Loop for high vol. stocks
+DROP PROCEDURE IF EXISTS BSE_volume;
+DELIMITER //
+CREATE PROCEDURE BSE_volume()
+   	BEGIN
+    	DECLARE a INT Default 1 ;
+    	DECLARE c INT DEFAULT 1;
+    	DECLARE average INT DEFAULT 1;    	
+    	SELECT COUNT(*) FROM  `BSE_stocks`;
+    	SET c = COUNT(*);
+    	WHILE a < 3162 DO
+	        SELECT avg(volume) FROM 
+				(SELECT VOLUME FROM `BSE_stocks_details`
+				WHERE BSE_stock_id = a
+				ORDER BY date DESC
+				LIMIT 30) S;
+			SET average = avg(volume);
+			IF average > 10000 THEN         
+	        	insert into BSE_stocks (vol_category) values (1);
+	        END IF;
+	        SET a=a+1;	         
+   		END WHILE;
+	END//
+
+
+SHOW PROCEDURE STATUS;
+SHOW FUNCTION STATUS;
+

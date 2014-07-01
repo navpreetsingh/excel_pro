@@ -1,0 +1,104 @@
+Helper Tit Bits
+How to import a MySQL dump file into your local database
+
+mysql -u root -p foundation3_production < foundation3-db-dump.sql
+How to start redis server
+
+Assuming that you have cloned resque git repository locally, Go to resque's local git directory and run following to start redis:
+
+rake redis:start
+Resque Operations
+
+Go to foundation3's directory
+Run Workers
+
+QUEUE=* rake environment resque:work
+Run Scheduler
+
+rake resque:scheduler
+Clear All Delayed Jobs
+
+Resque.reset_delayed_queue
+Run single test file
+
+From terminal, execute following command by adding actual file path
+
+spec path/to/spec/file.rb
+See the SQL queries in action while working on rails console
+
+ActiveRecord::Base.logger = Logger.new(STDOUT)
+Load your database to EngineYard
+
+This scenario assumes that you are moving data from one environment (or instance) to another. You copy the database backup file to a new database instance and then use a native MySQL command or, for PostgreSQL, a script provided by Engine Yard to load the database backup file. Read more here
+
+    *
+
+      Copy the database backup file to the database instance that you want to load it on.
+
+       scp [database file] [username]@[database host]:[target directory]/[filename]
+
+      where
+
+      [database file] is the name of the database backup file.
+
+      [username] is the user for the database instance. (The default user for the Engine Yard Cloud database is deploy.)
+
+      [database host] is the hostname of the database instance.
+
+      [target directory] is the directory that you want to copy the backup file to.
+
+      [filename] is the name for the file in its new location.
+
+      for example
+
+       scp myapp.2011-11-14T16-47-02.sql.gz deploy@ec2-174-129-17-196.compute-1.amazonaws.com:/tmp/mysql/dumpfile.sql
+
+    *
+
+      Via SSH, connect to the application and database instance (for single server environment) or the master database instance (for a clustered environment), and change to the directory where you copied the database backup file in first step (e.g.cd /tmp/mysql .
+    *
+
+      Import the database backup file to the database:
+
+       gunzip < [filename] | mysql -u [username] -p -h [database host] [app_name]
+
+      where
+
+      [username] is the user for the database instance. The default user for the Engine Yard Cloud database is deploy.
+
+      [database host] is the hostname of the database instance. In a single server environment, you can type localhost for the database hostname.
+
+      [app_name] is the name of the database.
+
+      [filename] is the name of the database backup file.
+
+      for example
+
+        gunzip < myapp.2011-11-14T16-47-02.sql.gz | mysql -u deploy -p -h ec2-174-129-17-196.compute-1.amazonaws.com myapp
+
+How to send signals to resque workers
+
+Get list of workers
+
+ps -e -o pid,command | grep [r]esque
+
+Signals
+
+Resque workers respond to a few different signals:
+
+QUIT - Wait for child to finish processing then exit TERM / INT - Immediately kill child then exit USR1 - Immediately kill child but don't exit USR2 - Don't start to process any new jobs CONT - Start to process new jobs again after a USR2 If you want to gracefully shutdown a Resque worker, use QUIT.
+
+If you want to kill a stale or stuck child, use USR1. Processing will continue as normal unless the child was not found. In that case Resque assumes the parent process is in a bad state and shuts down.
+
+If you want to kill a stale or stuck child and shutdown, use TERM
+
+If you want to stop processing jobs, but want to leave the worker running (for example, to temporarily alleviate load), use USR2 to stop processing, then CONT to start it again.
+
+eg.
+
+kill -s USR2 PID_OF_YOUR_PROCESS_HERE
+Git Howto: Revert a Commit Already Pushed to a Remote Repository
+
+git reset HEAD^ --hard
+
+http://christoph.ruegg.name/blog/2010/5/5/git-howto-revert-a-commit-already-pushed-to-a-remote-reposit.html
