@@ -53,7 +53,20 @@ CREATE PROCEDURE BSE_volume()
 SHOW PROCEDURE STATUS;
 SHOW FUNCTION STATUS;
 
-<<<<<<< HEAD
+
+SELECT * FROM `bse4_trends`
+inner join bse_stocks
+on bse_stocks.id = bse4_trends.bse_stock_id
+inner join bse_stocks_details
+on bse_stocks_details.bse_stock_id = bse4_trends.bse_stock_id
+where bse4_trends.d7_t > 0
+and bse4_trends.d3_t > 0 
+and bse_stocks_details.DATE =  "2014-06-24"
+and bse_stocks_details.bs_signal = 1
+order by bse4_trends.avg_high desc
+
+
+
 SELECT * FROM `bse_stocks_details`
 INNER JOIN bse_stocks
 on bse_stocks.id = bse_stocks_details.bse_stock_id
@@ -74,7 +87,7 @@ bse_stocks_details.bse_stock_id = bse4p_trends.bse_stock_id
 where bse4p_trends.d3_t > 0 and
 bse4p_trends.d7_t > 0 and 
 bse4p_trends.date = "2013-10-18" and
-bse_stocks_details.date = "2013-10-18" and
+bse_stocks_details.date in ("2013-10-21", "2013-10-18") and
 bse_stocks_details.bs_signal = 1
 order by bse4p_trends.avg_high desc
 limit 10
@@ -90,19 +103,8 @@ bse_stocks_details.date = "2013-10-18" and
 bse_stocks_details.bs_signal = -1
 order by bse4p_trends.avg_high desc
 limit 10
-=======
 
-SELECT * FROM `bse4_trends`
-inner join bse_stocks
-on bse_stocks.id = bse4_trends.bse_stock_id
-inner join bse_stocks_details
-on bse_stocks_details.bse_stock_id = bse4_trends.bse_stock_id
-where bse4_trends.d7_t > 0
-and bse4_trends.d3_t > 0 
-and bse_stocks_details.DATE =  "2014-06-24"
-and bse_stocks_details.bs_signal = 1
-order by bse4_trends.avg_high desc
 
->>>>>>> a507f583783d8ba23a4b85a1c66513932b913d14
+
 
 
