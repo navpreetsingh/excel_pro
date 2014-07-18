@@ -54,3 +54,6 @@ CSV.foreach("nse_bhav_copy.csv", :headers => true) do |row|
 		puts "#{stock}: #{Time.now - t}"	
 	end		
 end
+
+
+#http://www.nseindia.com/marketinfo/sym_map/symbolMapping.jsp?dataType=priceVolume&symbol=3iinfotech&segmentL=ALL&dateink=3&symbolCount=1&seriesRange=day&fromDate=01-07-2014&toDate=17-07-2014

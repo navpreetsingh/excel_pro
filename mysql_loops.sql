@@ -104,7 +104,32 @@ bse_stocks_details.bs_signal = -1
 order by bse4p_trends.avg_high desc
 limit 10
 
+# to delete stocks having volume less than 3
+delete `bse_stocks_details` FROM `bse_stocks_details`
+left join bse_stocks on
+bse_stocks.id = bse_stocks_details.bse_stock_id
+where bse_stocks.vol_category < 3
 
+mysqldump --opt --user=root --password=waheguru13 indian_stocks bse_stocks_details  --where="date='2014-07-14'" > bse_stocks_details.sql
 
+#to know the stock which is not updated
+SELECT *, count(*) as cn FROM `bse_stocks_details`
+left join bse_stocks on
+bse_stocks.id = bse_stocks_details.bse_stock_id
+group by bse_stocks_details.bse_stock_id 
+having cn < 32
 
+#to bring new data from dump in stock details
+INSERT INTO `nse_stocks_details` (nse_stock_id, date, open, high, low, close, volume, turnover) 
+SELECT nse_stock_id, date, open, high, low, close, volume, turnover FROM `nse_dumps`
+where nse_dumps.nse_stock_id in (27, 185, 633, 672, 826, 938, 1049, 1106) AND
+nse_dumps.date >= "2014-06-03"
 
+INSERT INTO `bse_stocks_details` (bse_stock_id, date, open, high, low, close, volume, no_of_trades, total_turnover) 
+SELECT bse_stock_id, date, open, high, low, close, volume, no_of_trades, total_turnover FROM `bse_dumps`
+where bse_dumps.bse_stock_id in (411, 667, 696, 719, 905, 947, 1017, 1703, 1812, 1870, 2007, 2135, 2154, 2198, 2277, 2651, 2656, 2674, 2696, 2767, 2839, 3020, 3080, 3124) AND
+bse_dumps.date >= "2014-06-03"
+
+#to delete stocks havin vol < 3
+delete FROM `bse_stocks_details`
+where bse_stock_id in
