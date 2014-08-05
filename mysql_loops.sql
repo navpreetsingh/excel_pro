@@ -111,6 +111,8 @@ bse_stocks.id = bse_stocks_details.bse_stock_id
 where bse_stocks.vol_category < 3
 
 mysqldump --opt --user=root --password=waheguru13 indian_stocks bse_stocks_details  --where="date='2014-07-14'" > bse_stocks_details.sql
+mysqldump --opt --user=root --password=waheguru13 indian_stocks nse_dumps  --where="date='2014-08-05'" > nse_dumps.sql
+mysqldump --opt --user=root --password=waheguru13 indian_stocks nse_stocks_details  --where="date='2014-08-05'" > nse_stocks_details.sql
 
 #to know the stock which is not updated
 SELECT *, count(*) as cn FROM `bse_stocks_details`
@@ -135,7 +137,7 @@ delete FROM `bse_stocks_details`
 where bse_stock_id in
 
 
-INSERT INTO `nse_year_details` (nse_stock_id, date, open, high, low, close, volume)
+INSERT INTO `nse_year_details` (nse_stock_id, year, open, high, low, close, volume)
 SELECT nse_stock_id, DATE_FORMAT(date, "%Y") as year, 
 SUBSTRING_INDEX( GROUP_CONCAT( CAST( OPEN AS CHAR ) ORDER BY DATE ) ,  ',', 1 ) AS OPEN, 
 max(high) AS high, min(low) AS low, 
@@ -150,7 +152,6 @@ and useless_stock=1
 GROUP BY DATE_FORMAT(date, "%Y"),
 nse_stock_id 
 ORDER by nse_stock_id ASC
-
 
 update `nse_month_details`
 set oh_diff = (((high - open) / open) * 100),
@@ -194,5 +195,3 @@ and useless_stock=1
 GROUP BY DATE_FORMAT(date, "%X Week: %V"),
 nse_stock_id 
 ORDER by nse_stock_id, date1 asc
-
-
