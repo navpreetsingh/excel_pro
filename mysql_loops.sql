@@ -195,3 +195,35 @@ and useless_stock=1
 GROUP BY DATE_FORMAT(date, "%X Week: %V"),
 nse_stock_id 
 ORDER by nse_stock_id, date1 asc
+
+
+SELECT * FROM `nse_week_details`
+left join nse_stocks on
+nse_stocks.id = nse_week_details.nse_stock_id
+where  nse_week_details.date = "2014 Week: 31"
+order by  nse_week_details.oc_diff desc
+
+
+SELECT * FROM `nse_week_details` n1
+left join nse_stocks n2 on 
+n1.nse_stock_id = n2.id
+where n1.date1 = "2014-08-08"
+order by n1.oc_diff desc
+
+#TOP WEEKLY STOCKS
+SELECT nse_stock_id, sum(bs_signal), n2.stock_name FROM `nse_week_details` n1
+left join nse_stocks n2 on 
+n1.nse_stock_id = n2.id
+where n1.date1 > "2014-06-27"
+group by n1.nse_stock_id
+ORDER BY sum(bs_signal)  DESC
+
+#TOP MONTHLY STOCKS
+SELECT nse_stock_id, sum(bs_signal), n2.stock_name FROM `nse_month_details` n1
+left join nse_stocks n2 on 
+n1.nse_stock_id = n2.id
+where n1.date1 > "2014-04-30"
+group by n1.nse_stock_id
+ORDER BY sum(bs_signal)  DESC
+
+
